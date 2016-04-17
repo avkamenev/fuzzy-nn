@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
+from sklearn import preprocessing
 
 data = pd.read_csv('train1.csv', delimiter=';')
 
@@ -9,6 +10,8 @@ data = pd.read_csv('train1.csv', delimiter=';')
 #data.iloc[:,0] = times
 
 x = data.iloc[:,1:5].values
+min_max_scaler = preprocessing.MinMaxScaler()
+x = min_max_scaler.fit_transform(x)
 y = data.iloc[:,5].values
 
 
