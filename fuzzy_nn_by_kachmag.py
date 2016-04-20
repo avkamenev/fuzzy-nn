@@ -33,8 +33,8 @@ c = np.random.rand((x.shape[1]+1)*len(fRules),1)-0.5
 #c = np.random.rand(number_of_rules, x.shape[1]+1)
 #c = np.zeros(((x.shape[1]+1)*len(fRules),1))
 
-old_error=2
-error=1
+old_error=3
+error=2
 loop_numbers=0
 while ((old_error-error)>=0.001) & (error>0.03):
     loop_numbers += 1
@@ -46,12 +46,16 @@ while ((old_error-error)>=0.001) & (error>0.03):
 
     old_error = error
     y_model = np.reshape(x_model.dot(c), y.shape)
-    error = np.sum(abs(y_model - y)/abs(y))/len(y)
+    error = np.sqrt(np.mean((y_model - y)**2))
     print str(loop_numbers) + ':'
     print str(round(error,5)) + ' with improvement: ' + str(round(old_error-error,5))
     y_test_model = np.reshape(x_test_model.dot(c), y_test.shape)
     print 'TEST:'+str(round(np.sum(abs(y_test_model - y_test)/abs(y_test))/len(y_test),5))
 
+
+
+print np.sqrt(np.mean((y_model - y)**2))
+print np.sqrt(np.mean((y_test_model - y_test)**2))
 
 
 

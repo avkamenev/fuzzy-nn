@@ -43,7 +43,7 @@ round(sum(abs(rfc.predict(x) - y)/abs(y))/len(y),4)
 
 round(sum(abs(rfc.predict(x_test) - y_test)/abs(y_test))/len(y_test),4)
 
-
+np.sqrt(np.mean((rfc.predict(x_test) - y_test)**2))
 
 
 
