@@ -37,7 +37,7 @@ y = train_data.iloc[:,4].values
 y_test = test_data.iloc[:,4].values
 
 
-rfc = RandomForestRegressor(n_estimators=100)
+rfc = RandomForestRegressor(n_estimators=1000)
 rfc = rfc.fit(x, y)
 round(sum(abs(rfc.predict(x) - y)/abs(y))/len(y),4)
 
