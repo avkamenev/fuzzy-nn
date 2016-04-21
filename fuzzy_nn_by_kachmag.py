@@ -29,14 +29,22 @@ x_model = np.zeros((len(x), (x.shape[1]+1)*len(fRules)))
 for i in range(len(x)):
     x_model[i,:] = np.reshape(np.array([x_with_one[i,:]]).T.dot(np.array([beta[i,:]])), ( (x.shape[1]+1)*len(fRules)))
 
-c = np.random.rand((x.shape[1]+1)*len(fRules),1)-0.5
+np.random.seed(1234)
+c = (np.random.rand((x.shape[1]+1)*len(fRules),1)-0.5) * 2
 #c = np.random.rand(number_of_rules, x.shape[1]+1)
 #c = np.zeros(((x.shape[1]+1)*len(fRules),1))
 
 old_error=3
 error=2
 loop_numbers=0
-while ((old_error-error)>=0.001) & (error>0.03):
+
+y_model = np.reshape(x_model.dot(c), y.shape)
+error = np.sqrt(np.mean((y_model - y)**2))
+kachmag_errors = []
+kachmag_errors = np.append(kachmag_errors, error)
+
+#while ((old_error-error)>=0.001) & (error>0.03):
+while loop_numbers!=100:
     loop_numbers += 1
 
     for t in range(len(x)):
@@ -47,6 +55,7 @@ while ((old_error-error)>=0.001) & (error>0.03):
     old_error = error
     y_model = np.reshape(x_model.dot(c), y.shape)
     error = np.sqrt(np.mean((y_model - y)**2))
+    kachmag_errors = np.append(kachmag_errors, error)
     print str(loop_numbers) + ':'
     print str(round(error,5)) + ' with improvement: ' + str(round(old_error-error,5))
     y_test_model = np.reshape(x_test_model.dot(c), y_test.shape)
@@ -89,27 +98,4 @@ xopt = fmin(f, mf_params, xtol=0.01, ftol=0.01, maxiter=50)
 print f(xopt)
 mfs = [[xopt[0],xopt[1]], [xopt[2],xopt[3]], [xopt[4],xopt[5]], [xopt[6],xopt[7]], [xopt[8],xopt[9]], [xopt[10],xopt[11]]]
 #mfs = [[xopt[0],xopt[1]], [xopt[2],xopt[3]], [xopt[4],xopt[5]]]
-
-
-########
-# TEST #
-########
-w_values = np.zeros((len(x_test), len(fRules)))
-for n in range(len(fRules)):
-    rule = fRules[n]
-    w_value = np.zeros((len(x_test), len(rule)))
-    for i in range(len(rule)):
-        w_value[:,i] = scipy.stats.norm(mfs[rule[i]][0], mfs[rule[i]][1]).pdf(x_test[:,i])
-    w_values[:,n] = np.max(w_value, axis=1)
-
-beta_test = w_values/np.array([np.sum(w_values, axis=1)]).T
-x_test_with_one = np.column_stack((np.ones(len(x_test)).T, x_test))
-x_test_model = np.zeros((len(x_test), (x_test.shape[1]+1)*len(fRules)))
-for i in range(len(x_test)):
-    x_test_model[i,:] = np.reshape(np.array([x_test_with_one[i,:]]).T.dot(np.array([beta_test[i,:]])), ( (x_test.shape[1]+1)*len(fRules)))
-
-y_test_model = np.reshape(x_test_model.dot(c), y_test.shape)
-print round(np.sum(abs(y_test_model - y_test)/abs(y_test))/len(y_test),5)
-
-
 
