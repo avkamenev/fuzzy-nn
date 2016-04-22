@@ -4,13 +4,15 @@ from scipy.optimize import fmin
 import scipy
 
 
-number_of_separations = 3
-step_for_mf = 1./(number_of_separations-1)
+#number_of_separations = 3
+#step_for_mf = 1./(number_of_separations-1)
 #mfs = [[0,0.05], [0.1,0.05], [0.2,0.05], [0.3,0.05], [0.4,0.05], [0.5,0.05], [0.6,0.05], [0.7,0.05], [0.8,0.05], [0.9,0.05], [1,0.05]]
-mfs = [[0,0.05], [0.2,0.05], [0.4,0.05], [0.6,0.05], [0.8,0.05], [1,0.05]]
-#mfs = [[0,0.05], [step_for_mf,0.05], [1,0.05]]
+#mfs = [[0,0.05], [0.2,0.05], [0.4,0.05], [0.6,0.05], [0.8,0.05], [1,0.05]]
+mfs = [[0,0.05], [0.5,0.05], [1,0.05]]
+mfs = [[0,0.3], [1,0.3]]
 
 fRules = list(product(range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs))))
+fRules = list(product(range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs))))
 
 w_values = np.zeros((len(x), len(fRules)))
 for n in range(len(fRules)):
@@ -34,7 +36,7 @@ c = (np.random.rand((x.shape[1]+1)*len(fRules),1)-0.5) * 2
 #c = np.random.rand(number_of_rules, x.shape[1]+1)
 #c = np.zeros(((x.shape[1]+1)*len(fRules),1))
 
-old_error=3
+old_error=10
 error=2
 loop_numbers=0
 
@@ -42,9 +44,10 @@ y_model = np.reshape(x_model.dot(c), y.shape)
 error = np.sqrt(np.mean((y_model - y)**2))
 kachmag_errors = []
 kachmag_errors = np.append(kachmag_errors, error)
+print 'prepared'
 
-#while ((old_error-error)>=0.001) & (error>0.03):
-while loop_numbers!=100:
+while ((old_error-error)>=0.001) & (error>0.03):
+#while loop_numbers!=100:
     loop_numbers += 1
 
     for t in range(len(x)):

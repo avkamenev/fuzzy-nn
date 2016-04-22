@@ -37,7 +37,7 @@ y = train_data.iloc[:,4].values
 y_test = test_data.iloc[:,4].values
 
 
-rfc = RandomForestRegressor(n_estimators=1000)
+rfc = RandomForestRegressor(n_estimators=500)
 rfc = rfc.fit(x, y)
 round(sum(abs(rfc.predict(x) - y)/abs(y))/len(y),4)
 
@@ -45,6 +45,23 @@ round(sum(abs(rfc.predict(x_test) - y_test)/abs(y_test))/len(y_test),4)
 
 np.sqrt(np.mean((rfc.predict(x_test) - y_test)**2))
 
+
+
+
+
+home_depot = pd.read_csv('/home/andrey/Kaggle/home-depot/dataset/all_good_features/all_good_features_train.csv')
+
+indices = range(len(home_depot))
+np.random.shuffle(indices)
+#home_depot = home_depot.iloc[indices[:50000]]
+
+home_depot.iloc[0]
+home_depot.shape
+
+x = home_depot[['words_in_title','words_in_descr','number_in_query','query_len','title_len','descr_len','ratio_title','ratio_descr', 'sim_with_title_w2v', 'sim_with_descr_w2v', 'sim_with_title_w2v_title_descr', 'sim_with_descr_w2v_title_descr']].values
+min_max_scaler = preprocessing.MinMaxScaler()
+x = min_max_scaler.fit_transform(np.row_stack(x))
+y = home_depot['relevance'].values
 
 
 

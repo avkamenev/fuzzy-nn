@@ -25,7 +25,7 @@ for i in range(len(x)):
 np.random.seed(1234)
 c = (np.random.rand((x.shape[1]+1)*len(fRules),1)-0.5) * 2
 
-alfa = 300
+alfa = 30
 
 y_model = np.reshape(x_model.dot(c), y.shape)
 error = np.sqrt(np.mean((y_model - y)**2))
