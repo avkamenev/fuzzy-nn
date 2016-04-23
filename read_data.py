@@ -112,3 +112,15 @@ print np.mean(y[valid_indices]==3)*100
 
 
 
+x = home_depot.iloc[train_indices].drop('relevance', axis=1).values
+y = home_depot['relevance'].values[train_indices]
+rfc = RandomForestRegressor(n_estimators=1000)
+rfc = rfc.fit(x, y)
+#round(sum(abs(rfc.predict(x) - y)/abs(y))/len(y),4)
+#round(sum(abs(rfc.predict(x_test) - y_test)/abs(y_test))/len(y_test),4)
+print np.sqrt(np.mean((rfc.predict(x) - y)**2))
+
+x_valid = home_depot.iloc[valid_indices].drop('relevance', axis=1).values
+y_valid = home_depot['relevance'].values[valid_indices]
+print np.sqrt(np.mean((rfc.predict(x_valid) - y_valid)**2))
+
