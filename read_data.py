@@ -84,6 +84,7 @@ y_test = test_data['relevance'].values
 #-----------------------------------------------------
 # Balanced sample
 #-----------------------------------------------------
+home_depot = pd.read_csv('/home/andrey/Kaggle/home-depot/dataset/all_good_features/all_good_features_train.csv')
 np.random.seed(1234)
 y = home_depot['relevance'].values
 values = [1, 1.33, 1.67, 2, 2.33, 2.67, 3]
@@ -101,26 +102,61 @@ for n in range(len(values)):
 train_indices = train_indices.astype(int)
 valid_indices = valid_indices.astype(int)
 
+#------------------------------
+#the same distr
+#------------------------------
+home_depot = pd.read_csv('/home/andrey/Kaggle/home-depot/dataset/all_good_features/all_good_features_train.csv')
+np.random.seed(1234)
+y = home_depot['relevance'].values
+values = [1, 1.33, 1.67, 2, 2.33, 2.67, 3]
+train_indices = []
 
-print np.mean(y[valid_indices]==1)*100
-print np.mean(y[valid_indices]==1.33)*100
-print np.mean(y[valid_indices]==1.67)*100
-print np.mean(y[valid_indices]==2)*100
-print np.mean(y[valid_indices]==2.33)*100
-print np.mean(y[valid_indices]==2.67)*100
-print np.mean(y[valid_indices]==3)*100
+for n in range(len(values)):
+    part_size = int(np.mean(y==values[n])*2000)
+    indices = list(np.where(y==values[n]))[0]
+    np.random.shuffle(indices)
+    train_indices = np.append(train_indices, indices[:part_size])
+train_indices = train_indices.astype(int)
+
+
+print np.mean(y==1)*100
+print np.mean(y==1.33)*100
+print np.mean(y==1.67)*100
+print np.mean(y==2)*100
+print np.mean(y==2.33)*100
+print np.mean(y==2.67)*100
+print np.mean(y==3)*100
 
 
 
-x = home_depot.iloc[train_indices].drop('relevance', axis=1).values
+
+#x = home_depot.iloc[train_indices].drop('relevance', axis=1).values
+x = home_depot[['words_in_title','words_in_descr','number_in_query','query_len','title_len','descr_len','ratio_title','ratio_descr', 'sim_with_title_w2v', 'sim_with_descr_w2v', 'sim_with_title_w2v_title_descr', 'sim_with_descr_w2v_title_descr']].iloc[train_indices].values
+
 y = home_depot['relevance'].values[train_indices]
-rfc = RandomForestRegressor(n_estimators=1000)
+rfc = RandomForestRegressor(n_estimators=500)
 rfc = rfc.fit(x, y)
 #round(sum(abs(rfc.predict(x) - y)/abs(y))/len(y),4)
 #round(sum(abs(rfc.predict(x_test) - y_test)/abs(y_test))/len(y_test),4)
 print np.sqrt(np.mean((rfc.predict(x) - y)**2))
 
-x_valid = home_depot.iloc[valid_indices].drop('relevance', axis=1).values
-y_valid = home_depot['relevance'].values[valid_indices]
+#x_valid = home_depot.iloc[valid_indices].drop('relevance', axis=1).values
+# x_valid = home_depot[['words_in_descr','number_in_query','query_len','title_len','descr_len','ratio_title','ratio_descr', 'sim_with_title_w2v', 'sim_with_descr_w2v', 'sim_with_title_w2v_title_descr', 'sim_with_descr_w2v_title_descr']].iloc[valid_indices].values
+# y_valid = home_depot['relevance'].values[valid_indices]
+
+#val_data = home_depot.drop(list(train_indices))
+val_data = home_depot[['words_in_title','words_in_descr','number_in_query','query_len','title_len','descr_len','ratio_title','ratio_descr', 'sim_with_title_w2v', 'sim_with_descr_w2v', 'sim_with_title_w2v_title_descr', 'sim_with_descr_w2v_title_descr', 'relevance']].drop(list(train_indices))
+
+x_valid = val_data.drop('relevance', axis=1).values
+y_valid = val_data['relevance'].values
+
 print np.sqrt(np.mean((rfc.predict(x_valid) - y_valid)**2))
+
+
+min_max_scaler = preprocessing.MinMaxScaler()
+min_max_scaler.fit(np.row_stack((x,x_valid)))
+
+x = min_max_scaler.transform(x)
+x_test = min_max_scaler.transform(x_valid)
+y_test = y_valid
 
