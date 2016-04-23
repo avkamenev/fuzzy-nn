@@ -17,7 +17,7 @@ for i in range(len(x_test)):
     x_test_model[i,:] = np.reshape(np.array([x_test_with_one[i,:]]).T.dot(np.array([beta_test[i,:]])), ( (x_test.shape[1]+1)*len(fRules)))
 
 y_test_model = np.reshape(x_test_model.dot(c), y_test.shape)
-print round(np.sum(abs(y_test_model - y_test)/abs(y_test))/len(y_test),5)
+#print round(np.sum(abs(y_test_model - y_test)/abs(y_test))/len(y_test),5)
 
 print np.sqrt(np.mean((y_test_model - y_test)**2))
 

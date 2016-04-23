@@ -8,10 +8,10 @@ import scipy
 #step_for_mf = 1./(number_of_separations-1)
 #mfs = [[0,0.05], [0.1,0.05], [0.2,0.05], [0.3,0.05], [0.4,0.05], [0.5,0.05], [0.6,0.05], [0.7,0.05], [0.8,0.05], [0.9,0.05], [1,0.05]]
 #mfs = [[0,0.05], [0.2,0.05], [0.4,0.05], [0.6,0.05], [0.8,0.05], [1,0.05]]
-mfs = [[0,0.05], [0.5,0.05], [1,0.05]]
+#mfs = [[0,0.05], [0.5,0.05], [1,0.05]]
 mfs = [[0,0.3], [1,0.3]]
 
-fRules = list(product(range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs))))
+#fRules = list(product(range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs))))
 fRules = list(product(range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs))))
 
 w_values = np.zeros((len(x), len(fRules)))
@@ -46,7 +46,7 @@ kachmag_errors = []
 kachmag_errors = np.append(kachmag_errors, error)
 print 'prepared'
 
-while ((old_error-error)>=0.001) & (error>0.03):
+while ((old_error-error)>=0.00001) & (error>0.03):
 #while loop_numbers!=100:
     loop_numbers += 1
 
@@ -61,9 +61,8 @@ while ((old_error-error)>=0.001) & (error>0.03):
     kachmag_errors = np.append(kachmag_errors, error)
     print str(loop_numbers) + ':'
     print str(round(error,5)) + ' with improvement: ' + str(round(old_error-error,5))
-    y_test_model = np.reshape(x_test_model.dot(c), y_test.shape)
-    print 'TEST:'+str(round(np.sum(abs(y_test_model - y_test)/abs(y_test))/len(y_test),5))
-
+#    y_test_model = np.reshape(x_test_model.dot(c), y_test.shape)
+#    print 'TEST:'+str(round(np.sqrt(np.mean((y_test_model - y_test)**2)),5))
 
 
 print np.sqrt(np.mean((y_model - y)**2))
