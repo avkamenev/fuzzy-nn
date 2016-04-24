@@ -19,27 +19,21 @@ for i in range(len(mfs)):
 
 loop_numbers=0
 max_loops = 10
+alfa = 30
 errors = np.zeros(max_loops)
 while ((old_error-error)>=0.00001) & (error>0.03) & (loop_numbers!=max_loops):
     print 'Loop: '+str(loop_numbers)
     for t in range(len(x)):
         if t%100==0:
             print t
-        # w_values = np.zeros(len(fRules))
-        # for n in range(len(fRules)):
-        #     rule = fRules[n]
-        #     w_value_for_rule = np.zeros(len(rule))
-        #     for m in range(len(rule)):
-        #         w_value_for_rule[m] = x_mf[rule[m],t,m]
-        #     # w_value_for_rule = x_mf[np.array(rule)[range(x.shape[1])], t, range(x.shape[1])]
-        #     w_values[n] = np.max(w_value_for_rule)
-
         w_values = x_mf[np.array(fRules)[:,range(x.shape[1])], t, range(x.shape[1])]
         w_values = np.max(w_values, axis=1)
         beta_t = w_values/np.sum(w_values)
         x_model_t = np.reshape(np.array([x_with_one[t,:]]).T.dot(np.array([beta_t])), ((x.shape[1]+1)*len(fRules)))
         y_model[t] = x_model_t.dot(c)
-        c = c + 0.1*( (y[t] - y_model[t]) / LA.norm(x_model_t)**2 ) * np.reshape(x_model_t, c.shape)
+
+        grad = 1./len(x) * np.array([(y_model[t]-y[t]) * x_model_t]).T
+        c = c - alfa * grad
 
     error = np.sqrt(np.mean((y_model - y)**2))
     errors[loop_numbers] = error

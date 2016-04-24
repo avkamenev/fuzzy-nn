@@ -21,3 +21,5 @@ y_test_model = np.reshape(x_test_model.dot(c), y_test.shape)
 
 print np.sqrt(np.mean((y_test_model - y_test)**2))
 
+np.sqrt(np.mean((y_test_model_old - y_test)**2))
+

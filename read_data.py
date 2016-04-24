@@ -39,12 +39,6 @@ y = train_data.iloc[:,4].values
 y_test = test_data.iloc[:,4].values
 
 
-rfc = RandomForestRegressor(n_estimators=500)
-rfc = rfc.fit(x, y)
-#round(sum(abs(rfc.predict(x) - y)/abs(y))/len(y),4)
-#round(sum(abs(rfc.predict(x_test) - y_test)/abs(y_test))/len(y_test),4)
-print np.sqrt(np.mean((rfc.predict(x) - y)**2))
-print np.sqrt(np.mean((rfc.predict(x_test) - y_test)**2))
 
 
 
@@ -127,9 +121,52 @@ print np.mean(y==2.33)*100
 print np.mean(y==2.67)*100
 print np.mean(y==3)*100
 
+#------------------------------
+#random sample
+#------------------------------
+
+home_depot = pd.read_csv('/home/andrey/Kaggle/home-depot/dataset/good_ft_2/good_ft_2_train.csv')
+
+indices = range(len(home_depot))
+np.random.shuffle(indices)
+train = home_depot.iloc[indices[:int(len(home_depot)*0.8)]]
+#test = home_depot.iloc[indices[int(len(home_depot)*0.1):(int(len(home_depot)*0.1) + int(len(home_depot)*0.05))]]
+test = home_depot.iloc[indices[int(len(home_depot)*0.8):]]
+
+#feature_names = ['words_in_title','words_in_descr','number_in_query','query_len','title_len','descr_len','ratio_title','ratio_descr', 'sim_with_title_w2v', 'sim_with_descr_w2v', 'sim_with_title_w2v_title_descr', 'sim_with_descr_w2v_title_descr']
+feature_names = ['sim_with_title_w2v_title_descr', 'sim_with_descr_w2v', 'sim_with_descr_w2v_title_descr', 'sim_with_title_w2v',
+                 'descr_len', 'search_title_tfidf_sum', 'title_len', 'search_title_tfidf_min', 'search_descr_tfidf_sum',
+                 'search_descr_tfidf_min', 'search_descr_tfidf_max', 'ratio_title', 'search_title_tfidf_max', 'query_len',
+                 'words_in_title', 'ratio_descr']
+x = train[feature_names[:8]].values
+x_test = test[feature_names[:8]].values
+y = train['relevance'].values
+y_test = test['relevance'].values
+
+#------------------------------
+# scaling
+#------------------------------
+
+min_max_scaler = preprocessing.MinMaxScaler()
+min_max_scaler.fit(np.row_stack((x,x_test)))
+x = min_max_scaler.transform(x)
+x_test = min_max_scaler.transform(x_test)
 
 
+#------------------------------
+# RF
+#------------------------------
+rfc = RandomForestRegressor(n_estimators=500)
+rfc = rfc.fit(x, y)
+#round(sum(abs(rfc.predict(x) - y)/abs(y))/len(y),4)
+#round(sum(abs(rfc.predict(x_test) - y_test)/abs(y_test))/len(y_test),4)
+print np.sqrt(np.mean((rfc.predict(x) - y)**2))
+print np.sqrt(np.mean((rfc.predict(x_test) - y_test)**2))
 
+
+#------------------------------
+#????
+#------------------------------
 #x = home_depot.iloc[train_indices].drop('relevance', axis=1).values
 x = home_depot[['words_in_title','words_in_descr','number_in_query','query_len','title_len','descr_len','ratio_title','ratio_descr', 'sim_with_title_w2v', 'sim_with_descr_w2v', 'sim_with_title_w2v_title_descr', 'sim_with_descr_w2v_title_descr']].iloc[train_indices].values
 
