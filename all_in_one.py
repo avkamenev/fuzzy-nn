@@ -36,12 +36,12 @@ x = min_max_scaler.transform(x)
 x_test = min_max_scaler.transform(x_test)
 
 
-rfc = RandomForestRegressor(n_estimators=500)
-start = timeit.default_timer()
-rfc = rfc.fit(x, y)
-stop = timeit.default_timer()
-print (stop - start)/60.
-print np.sqrt(np.mean((rfc.predict(x) - y)**2))
+# rfc = RandomForestRegressor(n_estimators=500)
+# start = timeit.default_timer()
+# rfc = rfc.fit(x, y)
+# stop = timeit.default_timer()
+# print (stop - start)/60.
+# print np.sqrt(np.mean((rfc.predict(x) - y)**2))
 #print np.sqrt(np.mean((rfc.predict(x_test) - y_test)**2))
 
 
