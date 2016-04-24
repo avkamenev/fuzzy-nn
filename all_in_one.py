@@ -35,6 +35,7 @@ min_max_scaler.fit(np.row_stack((x,x_test)))
 x = min_max_scaler.transform(x)
 x_test = min_max_scaler.transform(x_test)
 
+print 'x,y prepared'
 
 # rfc = RandomForestRegressor(n_estimators=500)
 # start = timeit.default_timer()
@@ -157,3 +158,5 @@ print errors
 out = pd.DataFrame(c)
 out.columns = ['params']
 out.to_csv('params.csv', index=None)
+
+print 'params saved'
