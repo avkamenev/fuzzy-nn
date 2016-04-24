@@ -28,7 +28,7 @@ feature_names = ['sim_with_title_w2v_title_descr',
 x = train[feature_names[:]].values
 x_test = test[feature_names[:]].values
 y = train['relevance'].values
-y_test = test['relevance'].values
+#y_test = test['relevance'].values
 
 min_max_scaler = preprocessing.MinMaxScaler()
 min_max_scaler.fit(np.row_stack((x,x_test)))
