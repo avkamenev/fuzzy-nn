@@ -6,8 +6,12 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn import preprocessing
 
 
-train = pd.read_csv('/home/andrey/Kaggle/home-depot/dataset/good_ft_2/good_ft_2_train.csv')
-test = pd.read_csv('/home/andrey/Kaggle/home-depot/dataset/good_ft_2/good_ft_2_test.csv')
+train = pd.read_csv('~/home-depot/dataset/good_ft_2_train.csv')
+test = pd.read_csv('~/home-depot/dataset/good_ft_2_test.csv')
+
+print train.shape
+print test.shape
+print 'READED!!'
 
 feature_names = ['sim_with_title_w2v_title_descr',
 'id.1',
