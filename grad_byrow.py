@@ -17,6 +17,8 @@ x_mf = np.zeros((len(mfs),x.shape[0],x.shape[1]))
 for i in range(len(mfs)):
     x_mf[i] = scipy.stats.norm(mfs[i][0], mfs[i][1]).pdf(x)
 
+old_error=10
+error=2
 loop_numbers=0
 max_loops = 10
 alfa = 30
@@ -35,6 +37,7 @@ while ((old_error-error)>=0.00001) & (error>0.03) & (loop_numbers!=max_loops):
         grad = 1./len(x) * np.array([(y_model[t]-y[t]) * x_model_t]).T
         c = c - alfa * grad
 
+    old_error = error
     error = np.sqrt(np.mean((y_model - y)**2))
     errors[loop_numbers] = error
     print 'ERROR: ' + str(error)

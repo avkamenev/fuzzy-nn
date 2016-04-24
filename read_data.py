@@ -121,6 +121,24 @@ print np.mean(y==2.33)*100
 print np.mean(y==2.67)*100
 print np.mean(y==3)*100
 
+
+#------------------------------
+# All train and test
+#------------------------------
+
+train = pd.read_csv('/home/andrey/Kaggle/home-depot/dataset/good_ft_2/good_ft_2_train.csv')
+test = pd.read_csv('/home/andrey/Kaggle/home-depot/dataset/good_ft_2/good_ft_2_test.csv')
+
+feature_names = ['sim_with_title_w2v_title_descr', 'sim_with_descr_w2v', 'sim_with_descr_w2v_title_descr', 'sim_with_title_w2v',
+                 'descr_len', 'search_title_tfidf_sum', 'title_len', 'search_title_tfidf_min', 'search_descr_tfidf_sum',
+                 'search_descr_tfidf_min', 'search_descr_tfidf_max', 'ratio_title', 'search_title_tfidf_max', 'query_len',
+                 'words_in_title', 'ratio_descr']
+x = train[feature_names[:]].values
+x_test = test[feature_names[:]].values
+y = train['relevance'].values
+y_test = test['relevance'].values
+
+
 #------------------------------
 #random sample
 #------------------------------
@@ -128,6 +146,7 @@ print np.mean(y==3)*100
 home_depot = pd.read_csv('/home/andrey/Kaggle/home-depot/dataset/good_ft_2/good_ft_2_train.csv')
 
 indices = range(len(home_depot))
+np.random.seed(1234)
 np.random.shuffle(indices)
 train = home_depot.iloc[indices[:int(len(home_depot)*0.8)]]
 #test = home_depot.iloc[indices[int(len(home_depot)*0.1):(int(len(home_depot)*0.1) + int(len(home_depot)*0.05))]]
@@ -138,10 +157,11 @@ feature_names = ['sim_with_title_w2v_title_descr', 'sim_with_descr_w2v', 'sim_wi
                  'descr_len', 'search_title_tfidf_sum', 'title_len', 'search_title_tfidf_min', 'search_descr_tfidf_sum',
                  'search_descr_tfidf_min', 'search_descr_tfidf_max', 'ratio_title', 'search_title_tfidf_max', 'query_len',
                  'words_in_title', 'ratio_descr']
-x = train[feature_names[:8]].values
-x_test = test[feature_names[:8]].values
+x = train[feature_names[:12]].values
+x_test = test[feature_names[:12]].values
 y = train['relevance'].values
 y_test = test['relevance'].values
+
 
 #------------------------------
 # scaling
