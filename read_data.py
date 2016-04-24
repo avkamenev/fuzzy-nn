@@ -1,6 +1,6 @@
 import pandas as pd
 from dateutil.relativedelta import relativedelta
-
+import timeit
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from sklearn import preprocessing
@@ -153,10 +153,23 @@ train = home_depot.iloc[indices[:int(len(home_depot)*0.8)]]
 test = home_depot.iloc[indices[int(len(home_depot)*0.8):]]
 
 #feature_names = ['words_in_title','words_in_descr','number_in_query','query_len','title_len','descr_len','ratio_title','ratio_descr', 'sim_with_title_w2v', 'sim_with_descr_w2v', 'sim_with_title_w2v_title_descr', 'sim_with_descr_w2v_title_descr']
-feature_names = ['sim_with_title_w2v_title_descr', 'sim_with_descr_w2v', 'sim_with_descr_w2v_title_descr', 'sim_with_title_w2v',
-                 'descr_len', 'search_title_tfidf_sum', 'title_len', 'search_title_tfidf_min', 'search_descr_tfidf_sum',
-                 'search_descr_tfidf_min', 'search_descr_tfidf_max', 'ratio_title', 'search_title_tfidf_max', 'query_len',
-                 'words_in_title', 'ratio_descr']
+# feature_names = ['sim_with_title_w2v_title_descr', 'sim_with_descr_w2v', 'sim_with_descr_w2v_title_descr', 'sim_with_title_w2v',
+#                  'descr_len', 'search_title_tfidf_sum', 'title_len', 'search_title_tfidf_min', 'search_descr_tfidf_sum',
+#                  'search_descr_tfidf_min', 'search_descr_tfidf_max', 'ratio_title', 'search_title_tfidf_max', 'query_len',
+#                  'words_in_title', 'ratio_descr']
+
+feature_names = ['sim_with_title_w2v_title_descr',
+'id.1',
+'sim_with_descr_w2v',
+'sim_with_title_w2v',
+'sim_with_descr_w2v_title_descr',
+'descr_len',
+'title_len',
+'search_descr_tfidf_sum',
+'search_title_tfidf_min',
+'query_len',
+'ratio_title']
+
 x = train[feature_names[:12]].values
 x_test = test[feature_names[:12]].values
 y = train['relevance'].values
@@ -177,7 +190,10 @@ x_test = min_max_scaler.transform(x_test)
 # RF
 #------------------------------
 rfc = RandomForestRegressor(n_estimators=500)
+start = timeit.default_timer()
 rfc = rfc.fit(x, y)
+stop = timeit.default_timer()
+print (stop - start)/60.
 #round(sum(abs(rfc.predict(x) - y)/abs(y))/len(y),4)
 #round(sum(abs(rfc.predict(x_test) - y_test)/abs(y_test))/len(y_test),4)
 print np.sqrt(np.mean((rfc.predict(x) - y)**2))
