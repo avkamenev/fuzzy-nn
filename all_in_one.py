@@ -42,7 +42,7 @@ rfc = rfc.fit(x, y)
 stop = timeit.default_timer()
 print (stop - start)/60.
 print np.sqrt(np.mean((rfc.predict(x) - y)**2))
-print np.sqrt(np.mean((rfc.predict(x_test) - y_test)**2))
+#print np.sqrt(np.mean((rfc.predict(x_test) - y_test)**2))
 
 
 
