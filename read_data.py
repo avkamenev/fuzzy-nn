@@ -148,9 +148,11 @@ home_depot = pd.read_csv('/home/andrey/Kaggle/home-depot/dataset/good_ft_2/good_
 indices = range(len(home_depot))
 np.random.seed(1234)
 np.random.shuffle(indices)
-train = home_depot.iloc[indices[:int(len(home_depot)*0.8)]]
-#test = home_depot.iloc[indices[int(len(home_depot)*0.1):(int(len(home_depot)*0.1) + int(len(home_depot)*0.05))]]
-test = home_depot.iloc[indices[int(len(home_depot)*0.8):]]
+train = home_depot.iloc[indices[:2000]]
+test = home_depot.iloc[indices[2000:4000]]
+# train = home_depot.iloc[indices[:int(len(home_depot)*0.8)]]
+# test = home_depot.iloc[indices[int(len(home_depot)*0.1):(int(len(home_depot)*0.1) + int(len(home_depot)*0.05))]]
+# test = home_depot.iloc[indices[int(len(home_depot)*0.8):]]
 
 #feature_names = ['words_in_title','words_in_descr','number_in_query','query_len','title_len','descr_len','ratio_title','ratio_descr', 'sim_with_title_w2v', 'sim_with_descr_w2v', 'sim_with_title_w2v_title_descr', 'sim_with_descr_w2v_title_descr']
 # feature_names = ['sim_with_title_w2v_title_descr', 'sim_with_descr_w2v', 'sim_with_descr_w2v_title_descr', 'sim_with_title_w2v',

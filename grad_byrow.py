@@ -23,7 +23,7 @@ old_error=10
 error=2
 loop_numbers=0
 max_loops = 10
-alfa = 100
+alfa = 0.0001
 errors = np.zeros(max_loops)
 while ((old_error-error)>=0.00001) & (error>0.03) & (loop_numbers!=max_loops):
     print 'Loop: '+str(loop_numbers)

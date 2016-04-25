@@ -3,8 +3,8 @@ from itertools import product
 import scipy
 
 #mfs = [[0,0.05], [0.2,0.05], [0.4,0.05], [0.6,0.05], [0.8,0.05], [1,0.05]]
-mfs = [[0,0.05], [0.5,0.05], [1,0.05]]
-#mfs = [[0,0.05], [1,0.05]]
+#mfs = [[0,0.05], [0.5,0.05], [1,0.05]]
+mfs = [[0,0.05], [1,0.05]]
 #fRules = list(product(range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)),range(len(mfs)),range(len(mfs)),range(len(mfs)),range(len(mfs)), range(len(mfs))))
 # fRules = list(product(range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)),
 #                       range(len(mfs)), range(len(mfs)), range(len(mfs)), range(len(mfs)),
@@ -26,6 +26,7 @@ old_error=10
 error=2
 loop_numbers=0
 max_loops = 5
+alfa=0.00001
 errors = np.zeros(max_loops)
 while ((old_error-error)>=0.00001) & (error>0.03) & (loop_numbers!=max_loops):
     print 'Loop: '+str(loop_numbers)
@@ -47,7 +48,7 @@ while ((old_error-error)>=0.00001) & (error>0.03) & (loop_numbers!=max_loops):
         beta_t = w_values/np.sum(w_values)
         x_model_t = np.reshape(np.array([x_with_one[t,:]]).T.dot(np.array([beta_t])), ((x.shape[1]+1)*len(fRules)))
         y_model[t] = x_model_t.dot(c)
-        c = c + 0.1*( (y[t] - y_model[t]) / LA.norm(x_model_t)**2 ) * np.reshape(x_model_t, c.shape)
+        c = c + alfa*( (y[t] - y_model[t]) / LA.norm(x_model_t)**2 ) * np.reshape(x_model_t, c.shape)
 
     old_error = error
     error = np.sqrt(np.mean((y_model - y)**2))
