@@ -9,7 +9,7 @@ for i in range(len(mfs)):
 x_test_with_one = np.column_stack((np.ones(len(x_test)).T, x_test))
 y_test_model = np.zeros(len(x_test))
 for t in range(len(x_test)):
-    if t%100==0:
+    if t%1000==0:
         print t
     w_values = x_test_mf[np.array(fRules)[:,range(x_test.shape[1])], t, range(x_test.shape[1])]
     w_values = np.max(w_values, axis=1)
@@ -23,3 +23,13 @@ print error
 
 
 
+
+
+
+res = pd.read_csv('fuzy_nn_result_0_466277.csv', index_col='id')
+out = res
+res['relevance'][res['relevance']>3] = 3
+min(res['relevance'])
+
+out = pd.DataFrame({'id': res.index, 'relevance': res.relevance})
+out.to_csv('fuzy_nn_result_0_466277.csv', index=None)
