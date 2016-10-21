@@ -1,10 +1,10 @@
 from numpy import linalg as LA
 from itertools import product
 import scipy
-IS_CUTTED_RULES = False
+IS_CUTTED_RULES = True
 
-#mfs = [[0,0.05], [0.0625,0.05], [0.125,0.05], [0.1875,0.05], [0.25,0.05], [0.3125,0.05], [0.375,0.05], [0.4375,0.05], [0.5,0.05], [0.5625,0.05], [0.625,0.05], [0.6875,0.05], [0.75,0.05], [0.8125,0.05], [0.875,0.05], [0.9375,0.05], [1,0.05]]
-mfs = [[0,0.05], [0.1,0.05], [0.2,0.05], [0.3,0.05], [0.4,0.05], [0.5,0.05], [0.6,0.05], [0.7,0.05], [0.8,0.05], [0.9,0.05], [1,0.05]]
+mfs = [[0,0.05], [0.0625,0.05], [0.125,0.05], [0.1875,0.05], [0.25,0.05], [0.3125,0.05], [0.375,0.05], [0.4375,0.05], [0.5,0.05], [0.5625,0.05], [0.625,0.05], [0.6875,0.05], [0.75,0.05], [0.8125,0.05], [0.875,0.05], [0.9375,0.05], [1,0.05]]
+#mfs = [[0,0.05], [0.1,0.05], [0.2,0.05], [0.3,0.05], [0.4,0.05], [0.5,0.05], [0.6,0.05], [0.7,0.05], [0.8,0.05], [0.9,0.05], [1,0.05]]
 #mfs = [[0,0.05], [0.2,0.05], [0.4,0.05], [0.6,0.05], [0.8,0.05], [1,0.05]]
 #mfs = [[0,0.05], [0.5,0.05], [1,0.05]]
 #mfs = [[0,0.05], [1,0.05]]
@@ -37,7 +37,7 @@ for i in range(len(mfs)):
 old_error=10
 error=2
 loop_numbers=0
-max_loops = 100
+max_loops = 10
 alfa=0.1
 errors = np.zeros(max_loops)
 while ((old_error-error)>=0.001) & (error>0.03) & (loop_numbers!=max_loops):
@@ -46,15 +46,6 @@ while ((old_error-error)>=0.001) & (error>0.03) & (loop_numbers!=max_loops):
     for t in range(len(x)):
         if t%500==0:
             print t
-        # w_values = np.zeros(len(fRules))
-        # for n in range(len(fRules)):
-        #     rule = fRules[n]
-        #     w_value_for_rule = np.zeros(len(rule))
-        #     for m in range(len(rule)):
-        #         w_value_for_rule[m] = x_mf[rule[m],t,m]
-        #     # w_value_for_rule = x_mf[np.array(rule)[range(x.shape[1])], t, range(x.shape[1])]
-        #     w_values[n] = np.max(w_value_for_rule)
-
         w_values = x_mf[np.array(fRules)[:,range(x.shape[1])], t, range(x.shape[1])]
         w_values = np.max(w_values, axis=1)
         beta_t = w_values/np.sum(w_values)
@@ -63,12 +54,13 @@ while ((old_error-error)>=0.001) & (error>0.03) & (loop_numbers!=max_loops):
         c = c + alfa*( (y[t] - y_model[t]) / LA.norm(x_model_t)**2 ) * np.reshape(x_model_t, c.shape)
 
     old_error = error
-    error = np.sqrt(np.mean((y_model - y)**2))
+#    error = np.sqrt(np.mean((y_model - y)**2))
+    error = np.sqrt(np.mean(abs((y_model - y) / y)))
     errors[loop_numbers] = error
     print 'ERROR: ' + str(error)
 #    alfa = alfa/1.5
     stop = timeit.default_timer()
-    print (stop - start)/60.
+    print 'time loop: ' + str((stop - start)/60.)
     loop_numbers += 1
 
 
